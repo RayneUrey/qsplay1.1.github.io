@@ -187,7 +187,7 @@
                             let num = 1
                             console.log(simpleTenR_greater)
 
-                            while (simpleTenR_greater >= wantedFloat / (10 ** 8)) {
+                            while (simpleTenR_greater >= wantedFloat / (10 ** dig)) {
 
                                 simpleTenR_greater = tradeUp(getIeee754_32(nine_floats + getIeee754_32(averFloat - num / (10 ** dig))), minFloat, maxFloat)
                                 num++
