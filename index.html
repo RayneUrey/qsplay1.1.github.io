@@ -1,0 +1,224 @@
+<html lang="en">
+
+<head>
+    <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="viewport"
+        content="width=device-width,height=device-height,inital-scale=1.0,maximum-scale=1.0,user-scalable=no;">
+    <meta name="apple-mobile-web-app-capable" content="yes">
+    <meta name="apple-mobile-web-app-status-bar-style" content="black">
+    <meta name="format-detection" content="telephone=no">
+    <title>炮车传媒&泉神电玩</title>
+    <style type="css">
+
+
+    </style>
+</head>
+
+<body>
+    <div id="left-bar" style="flex: left;">
+        <div id="flo_div" style="flex: left;">
+        </div>
+    </div>
+    <div id="right_bar">
+
+        <span>当前平均磨损：</span> <input type="tel" max="1" min="0" placeholder="当前平均磨损" id="tenCaculate_value">
+    </div>
+    <br>
+    <div id="paras_needed">
+
+        <span>输入最小磨损：</span> <input type="tel" value="0" id="minFloat" alt="最小磨损" name="最小磨损" title="最小磨损"><br>
+        <span>输入最大磨损：</span><input type="tel" value="1" id="maxFloat" alt="最大磨损" name="最大磨损" placeholder="最大磨损"><br>
+        <span>输入你的生日：</span> <input type="tel" value="20010101" id="wantedFloat" placeholder="请输入8位整数">
+        <input type="button" value="查询二次元成分比例" onclick="check_Anime_Concentration('wantedFloat')"><br>
+        <input type="date" id="birthday" value="2001-01-01" placeholder="请选择做的生日">
+        <input type="button" value="查询二次元成分比例" onclick="check_Anime_Concentration('birthday')"><br>
+
+    </div>
+    <span id="outPut_queryFloat">
+
+
+
+
+
+
+        <script>
+            let flo_div = document.getElementById("flo_div")
+            for (let i = 0; i < 10; i++) {
+                let solo_input = document.createElement('input')
+                solo_input.style.width = '50%'
+
+                solo_input.className = 'solo_input'
+                solo_input.type = "tel"
+                solo_input.onchange = caculte_myFloat
+                solo_input.value = 0.01 * i
+                flo_div.appendChild(solo_input)
+            }
+            function getIeee754_32(number) {
+                let temp_array = new Float32Array([number])
+                return temp_array[0]
+            }
+            function caculte_myFloat() {
+                var myItems = document.getElementsByClassName("solo_input")
+                let tenCaculate_value = getIeee754_32(0)
+                for (let item of myItems) {
+                    tenCaculate_value = getIeee754_32(tenCaculate_value + getIeee754_32(item.value))
+                }
+                document.getElementById('tenCaculate_value').value = getIeee754_32(tenCaculate_value / getIeee754_32(10))
+            }
+
+            caculte_myFloat()
+
+            var finalFloats = []
+
+
+
+            function check_Anime_Concentration(birthday_input_id) {
+                finalFloats = []
+                document.getElementById("outPut_queryFloat").innerHTML = ''
+                let maxFloat = document.getElementById("maxFloat").value
+                let minFloat = document.getElementById("minFloat").value
+                let wantedFloat = document.getElementById(birthday_input_id).value.replace('-', '').replace('-', '')
+
+
+
+
+
+                for (let dig = 8; dig < 12; dig++) {
+                    let ieee32_wanted = getIeee754_32(wantedFloat / (10 ** dig))
+
+
+                    if (String(ieee32_wanted * 10 ** dig).substr(0, 8) == wantedFloat) {
+                        let averFloat = (wantedFloat / (10 ** dig) - minFloat) / (maxFloat - minFloat)
+                        test_float(averFloat, dig, minFloat, maxFloat)
+
+
+
+                    } else if (String(ieee32_wanted * 10 ** dig).substr(0, 8) > wantedFloat) {
+                        let temp_ieee32_wanted = ieee32_wanted
+                        let num = 1
+                        while (String(getIeee754_32(temp_ieee32_wanted) * 10 ** dig).substr(0, 8) > wantedFloat) {
+                            num++
+                            temp_ieee32_wanted = temp_ieee32_wanted - num / (10 ** dig)
+                        }
+                        if (String(getIeee754_32(temp_ieee32_wanted) * 10 ** dig).substr(0, 8) == wantedFloat) {
+
+                            let averFloat = (wantedFloat / (10 ** dig) - minFloat) / (maxFloat - minFloat)
+                            test_float(averFloat, dig, minFloat, maxFloat)
+                        } else {
+                            finalFloats.push(`磨损：  ${ wantedFloat / (10 ** dig)}  不存在，相似磨损为 ${ieee32_wanted} </br>` )
+
+                        }
+
+
+
+
+                    } else {
+                        let temp_ieee32_wanted = ieee32_wanted
+                        let num = 1
+                        while (String(getIeee754_32(temp_ieee32_wanted) * 10 ** dig).substr(0, 8) <  wantedFloat) {
+                            num++
+                            temp_ieee32_wanted = temp_ieee32_wanted + num / (10 ** dig)
+                        }
+                        if (String(getIeee754_32(temp_ieee32_wanted) * 10 ** dig).substr(0, 8) == wantedFloat) {
+
+                            let averFloat = (wantedFloat / (10 ** dig) - minFloat) / (maxFloat - minFloat)
+                            test_float(averFloat, dig, minFloat, maxFloat)
+
+                        } else {
+                            finalFloats.push(`磨损：  ${ wantedFloat / (10 ** dig)}  不存在，相似磨损为 ${ieee32_wanted} </br>`)
+
+                        }
+
+                    }
+
+
+
+
+
+                    /*  let averFloat = (wantedFloat / (10 ** dig) - minFloat) / (maxFloat - minFloat)
+                             test_float(averFloat, dig, minFloat, maxFloat) */
+
+
+
+
+                    ////////////////////////////////////get final_float
+
+
+
+
+                    function nineFloats_repeate(averFloat, dig) {
+                        let finalFloat = 0.00
+                        for (let i = 0; i < 9; i++) {
+                            finalFloat = getIeee754_32(finalFloat + getIeee754_32(averFloat))
+                        }
+                        return finalFloat
+                    }
+                    ////////////////////////////////////test with final_float and nine_repeate
+                    function tradeUp(totalFloat, minFloat, maxFloat) {
+                        let tradeUpResult = getIeee754_32(getIeee754_32(getIeee754_32(totalFloat) / getIeee754_32(10)) * (getIeee754_32(maxFloat) - getIeee754_32(minFloat)) + getIeee754_32(minFloat))
+                        return tradeUpResult
+                    }
+                    ////////////////////////////////////generate result
+
+                    function test_float(averFloat, dig, minFloat, maxFloat) {
+                        let nine_floats = nineFloats_repeate(averFloat, dig)
+
+                        let tenAverTrade = tradeUp(getIeee754_32(nine_floats + getIeee754_32(averFloat)), minFloat, maxFloat)
+                        if (String((tenAverTrade * 10 ** dig)).substr(0, dig) == wantedFloat) {
+                            finalFloats.push(`可做${tenAverTrade}</br>`)
+
+                        } else if (String((tenAverTrade * 10 ** dig)).substring(0, dig) <= wantedFloat) {
+                            let simpleTenR_lower = tenAverTrade;    
+                            let num = 1
+                            while (simpleTenR_lower <= wantedFloat / (10 ** dig)) {
+
+                                simpleTenR_lower = tradeUp(getIeee754_32(nine_floats + getIeee754_32(averFloat + num / (10 ** dig))), minFloat, maxFloat)
+                                num++
+                                console.log(simpleTenR_lower.toFixed(16))
+                            }
+                            if (String((simpleTenR_lower * 10 ** dig)).substr(0, dig) == wantedFloat) { finalFloats.push(`可做${simpleTenR_lower}</br>`) } else { finalFloats.push(`该枪皮 ${wantedFloat / (10 ** dig)} 不可做,相似磨损</br> ${tenAverTrade}  '   or    '  ${simpleTenR_lower}</br> `) }
+
+
+
+                        } else {
+                            let simpleTenR_greater = tenAverTrade;
+                            let num = 1
+                            console.log(simpleTenR_greater)
+
+                            while (simpleTenR_greater >= wantedFloat / (10 ** dig)) {
+
+                                simpleTenR_greater = tradeUp(getIeee754_32(nine_floats + getIeee754_32(averFloat - num / (10 ** dig))), minFloat, maxFloat)
+                                num++
+                                console.log(simpleTenR_greater)
+                            }
+                            if (String((simpleTenR_greater * 10 ** dig)).substr(0, dig) == wantedFloat) { finalFloats.push(`可做${simpleTenR_greater}</br>`)} else { finalFloats.push(`该枪皮 ${wantedFloat / (10 ** dig)} 不可做,相似磨损</br> ${tenAverTrade}     or     ${simpleTenR_greater}  </br> `) }
+
+
+
+
+
+                        }
+
+
+
+
+
+                    }
+                }
+
+                for (let j = 0; j < 4; j++) {
+                    console.log(finalFloats[j])
+                    document.getElementById("outPut_queryFloat").innerHTML += finalFloats[j] + (`</br>`)
+                }
+            }
+
+
+        </script>
+
+
+
+</body>
+
+</html>
