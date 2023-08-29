@@ -166,10 +166,10 @@
                         let nine_floats = nineFloats_repeate(averFloat, dig)
 
                         let tenAverTrade = tradeUp(getIeee754_32(nine_floats + getIeee754_32(averFloat)), minFloat, maxFloat)
-                        if (String((tenAverTrade * 10 ** dig)).substr(0, dig) == wantedFloat) {
+                        if (String((tenAverTrade * 10 ** dig)).substr(0, 8) == wantedFloat) {
                             finalFloats.push(`可做${tenAverTrade}</br>`)
 
-                        } else if (String((tenAverTrade * 10 ** dig)).substring(0, dig) <= wantedFloat) {
+                        } else if (String((tenAverTrade * 10 ** dig)).substring(0, 8) <= wantedFloat) {
                             let simpleTenR_lower = tenAverTrade;    
                             let num = 1
                             while (simpleTenR_lower <= wantedFloat / (10 ** dig)) {
@@ -178,7 +178,7 @@
                                 num++
                                 console.log(simpleTenR_lower.toFixed(16))
                             }
-                            if (String((simpleTenR_lower * 10 ** dig)).substr(0, dig) == wantedFloat) { finalFloats.push(`可做${simpleTenR_lower}</br>`) } else { finalFloats.push(`该枪皮 ${wantedFloat / (10 ** dig)} 不可做,相似磨损</br> ${tenAverTrade}  '   or    '  ${simpleTenR_lower}</br> `) }
+                            if (String((simpleTenR_lower * 10 ** dig)).substr(0, 8) == wantedFloat) { finalFloats.push(`可做${simpleTenR_lower}</br>`) } else { finalFloats.push(`该枪皮 ${wantedFloat / (10 ** dig)} 不可做,相似磨损</br> ${tenAverTrade}  '   or    '  ${simpleTenR_lower}</br> `) }
 
 
 
@@ -187,13 +187,13 @@
                             let num = 1
                             console.log(simpleTenR_greater)
 
-                            while (simpleTenR_greater >= wantedFloat / (10 ** dig)) {
+                            while (simpleTenR_greater >= wantedFloat / (10 ** 8)) {
 
                                 simpleTenR_greater = tradeUp(getIeee754_32(nine_floats + getIeee754_32(averFloat - num / (10 ** dig))), minFloat, maxFloat)
                                 num++
                                 console.log(simpleTenR_greater)
                             }
-                            if (String((simpleTenR_greater * 10 ** dig)).substr(0, dig) == wantedFloat) { finalFloats.push(`可做${simpleTenR_greater}</br>`)} else { finalFloats.push(`该枪皮 ${wantedFloat / (10 ** dig)} 不可做,相似磨损</br> ${tenAverTrade}     or     ${simpleTenR_greater}  </br> `) }
+                            if (String((simpleTenR_greater * 10 ** dig)).substr(0, 8) == wantedFloat) { finalFloats.push(`可做${simpleTenR_greater}</br>`)} else { finalFloats.push(`该枪皮 ${wantedFloat / (10 ** dig)} 不可做,相似磨损</br> ${tenAverTrade}     or     ${simpleTenR_greater}  </br> `) }
 
 
 
